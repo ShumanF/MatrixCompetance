@@ -100,47 +100,32 @@ with tab1:
     # Calculate averages for each skill
     skill_averages = edited_df[st.session_state.skills].mean()
 
-    # Create enhanced radar chart
+    # Create radar chart
     fig = go.Figure()
 
-    # Add team average (bold trace)
+    # Add team average trace
     fig.add_trace(go.Scatterpolar(
         r=skill_averages,
         theta=st.session_state.skills,
         name='Team Average',
-        line=dict(width=3, color='red'),
+        line_width=3,
+        line_color='red',
         fill='toself'
     ))
 
-    # Update layout for better visualization
+    # Update layout with flatter structure
     fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[0, 5],
-                ticktext=['0', '1', '2', '3', '4', '5'],
-                tickvals=[0, 1, 2, 3, 4, 5],
-                gridcolor='lightgrey',
-                tickfont=dict(size=14)
-            ),
-            angularaxis=dict(
-                gridcolor='lightgrey',
-                tickfont=dict(size=16, weight='bold')
-            ),
-            bgcolor='white'
-        ),
+        title='Team Skill Overview',
+        polar_radialaxis_visible=True,
+        polar_radialaxis_range=[0, 5],
+        polar_radialaxis_ticktext=['0', '1', '2', '3', '4', '5'],
+        polar_radialaxis_tickvals=[0, 1, 2, 3, 4, 5],
+        polar_radialaxis_gridcolor='lightgrey',
+        polar_angularaxis_gridcolor='lightgrey',
+        polar_bgcolor='white',
         showlegend=False,
-        title=dict(
-            text="Team Skill Overview",
-            y=0.95,
-            x=0.5,
-            xanchor='center',
-            yanchor='top',
-            font=dict(size=24)
-        ),
         height=800,
-        width=1000,
-        margin=dict(t=100, b=100)
+        width=1000
     )
 
     # Display the chart
