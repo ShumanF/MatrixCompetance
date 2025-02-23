@@ -105,15 +105,26 @@ with tab1:
 
     # Add team average trace
     fig.add_trace(go.Scatterpolar(
-        r=skill_averages,
-        theta=st.session_state.skills,
-        name='Team Average',
+        r=skill_averages.tolist() + [skill_averages[0]],  # Close the loop by repeating the first value
+        theta=st.session_state.skills + [st.session_state.skills[0]],  # Close the loop for skills
+        name='Current Average',
         line_width=3,
-        line_color='red',
+        line_color='red',  # Current average line color
         fill='toself'
     ))
 
-    # Update layout with minimal configuration
+    # Add target trace (level 4 for all skills)
+    target_values = [4] * len(st.session_state.skills)  # Target level of 4 for all skills
+    fig.add_trace(go.Scatterpolar(
+        r=target_values + [target_values[0]],  # Close the loop for target values
+        theta=st.session_state.skills + [st.session_state.skills[0]],  # Close the loop for skills
+        name='Target Level',
+        line_width=3,
+        line_color='orange',  # Target line color
+        #line_dash='dash'  # Dashed line for target
+    ))
+
+    # Update layout
     fig.update_layout(
         title='Team Skill Overview',
         polar=dict(
@@ -122,17 +133,13 @@ with tab1:
                 range=[0, 5]
             )
         ),
-        showlegend=False,
+        showlegend=True,
         height=800,
         width=1000
     )
 
-    # Display the chart with specific config
-    st.plotly_chart(
-        fig, 
-        use_container_width=True,
-        config={'displayModeBar': False}  # Disable the mode bar to reduce JS dependencies
-    )
+    # Display the chart
+    st.plotly_chart(fig, use_container_width=True)
 
     # Add download button
     csv = edited_df.to_csv().encode('utf-8')
