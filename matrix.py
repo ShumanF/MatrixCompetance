@@ -113,23 +113,26 @@ with tab1:
         fill='toself'
     ))
 
-    # Update layout with flatter structure
+    # Update layout with minimal configuration
     fig.update_layout(
         title='Team Skill Overview',
-        polar_radialaxis_visible=True,
-        polar_radialaxis_range=[0, 5],
-        polar_radialaxis_ticktext=['0', '1', '2', '3', '4', '5'],
-        polar_radialaxis_tickvals=[0, 1, 2, 3, 4, 5],
-        polar_radialaxis_gridcolor='lightgrey',
-        polar_angularaxis_gridcolor='lightgrey',
-        polar_bgcolor='white',
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 5]
+            )
+        ),
         showlegend=False,
         height=800,
         width=1000
     )
 
-    # Display the chart
-    st.plotly_chart(fig, use_container_width=True)
+    # Display the chart with specific config
+    st.plotly_chart(
+        fig, 
+        use_container_width=True,
+        config={'displayModeBar': False}  # Disable the mode bar to reduce JS dependencies
+    )
 
     # Add download button
     csv = edited_df.to_csv().encode('utf-8')
